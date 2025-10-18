@@ -42,7 +42,7 @@
   "rangeStrategy": "auto",
 
   // Enable post-update options to be run after package/artifact updating.    | https://docs.renovatebot.com/configuration-options/#postupdateoptions
-  "postUpdateOptions": ["npmDedupe", "pnpmDedupe", "yarnDedupeFewer"],
+  // "postUpdateOptions": ["npmDedupe", "pnpmDedupe", "yarnDedupeFewer"],
 
   // false -> Renovate will upgrade dependencies to their latest only.        | https://docs.renovatebot.com/configuration-options/#separatemajorminor
   "separateMajorMinor": true,
