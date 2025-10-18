@@ -27,7 +27,7 @@
   "rangeStrategy": "auto",
   "separateMajorMinor": true,
   "lockFileMaintenance": {
-    "enabled": true,
+    "enabled": false,
     "automerge": true
   },
   "dependencyDashboardTitle": "Renovate Dependency Dashboard",
