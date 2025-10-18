@@ -1,0 +1,83 @@
+{
+  "extends": [
+    "config:recommended",
+    "group:linters",
+    "helpers:disableTypesNodeMajor",
+    "helpers:pinGitHubActionDigests",
+    "preview:dockerVersions",
+    "preview:dockerCompose",
+    ":timezone(Asia/Shanghai)",
+    ":disablePeerDependencies",
+    ":separateMultipleMajorReleases",
+    ":ignoreUnstable",
+    ":semanticCommits",
+    ":semanticPrefixFixDepsChoreOthers",
+    "customManagers:dockerfileVersions",
+    "customManagers:githubActionsVersions",
+    "security:openssf-scorecard"
+  ],
+  "baseBranches": [
+    "main"
+  ],
+  "rebaseWhen": "conflicted",
+  "labels": [
+    "dependencies"
+  ],
+  "rangeStrategy": "auto",
+  "postUpdateOptions": [
+    "npmDedupe",
+    "pnpmDedupe",
+    "yarnDedupeFewer"
+  ],
+  "separateMajorMinor": true,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true
+  },
+  "dependencyDashboardTitle": "Renovate Dependency Dashboard",
+  "dependencyDashboardLabels": [
+    "dependencies"
+  ],
+  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.",
+  "minimumReleaseAge": "7 days",
+  "rollbackPrs": true,
+  "configMigration": true,
+  "prCreation": "not-pending",
+  "vulnerabilityAlerts": {
+    "description": "Be sure that the Dependency graph and Dependabot alerts are enabled for the repo. Details: https://docs.renovatebot.com/configuration-options/#vulnerabilityalerts",
+    "enabled": true,
+    "addLabels": [
+      "security"
+    ]
+  },
+  "osvVulnerabilityAlerts": true,
+  "packageRules": [
+    {
+      "matchDepTypes": [
+        "optionalDependencies"
+      ],
+      "addLabels": [
+        "optional"
+      ]
+    },
+    {
+      "description": "v prefix workaround for action updates",
+      "matchDepTypes": [
+        "action"
+      ],
+      "extractVersion": "^(?<version>v\\d+\\.\\d+\\.\\d+)$",
+      "versioning": "regex:^v(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+))?$"
+    },
+    {
+      "description": "Remove v prefix in regex `_VERSION` updates",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "extractVersion": "^?v?(?<version>\\d+\\.\\d+\\.\\d+.*)$",
+      "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+.*))?$"
+    }
+  ],
+  "schedule": [
+    "at any time"
+  ]
+}
