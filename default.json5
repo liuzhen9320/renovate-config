@@ -1,0 +1,101 @@
+{
+  // Copied from https://github.com/SpotOnInc/renovate-config/blob/main/default.template.json5
+  "extends": [
+    // Default base configuration for all languages.                          | https://docs.renovatebot.com/presets-config/#configrecommended
+    "config:recommended",
+    // Group various lint packages together.                                  | https://docs.renovatebot.com/presets-group/#grouplinters
+    "group:linters",
+    // Disable major updates to @types/node.                                  | https://docs.renovatebot.com/presets-helpers/#helpersdisabletypesnodemajor
+    "helpers:disableTypesNodeMajor",
+    // Pin GitHub Action digests.                                             | https://docs.renovatebot.com/presets-helpers/#helperspingithubactiondigests
+    "helpers:pinGitHubActionDigests",
+    // Upgrade Minor and Major Docker tags to newer versions.                 | https://docs.renovatebot.com/presets-preview/#previewdockerversions
+    "preview:dockerVersions",
+    // Enable Docker Compose image updating.                                  | https://docs.renovatebot.com/presets-preview/#previewdockercompose
+    "preview:dockerCompose",
+    // Set the timezone.
+    ":timezone(Asia/Shanghai)",
+    // Do not update peerDependencies versions/ranges.                        | https://docs.renovatebot.com/presets-default/#disablepeerdependencies
+    ":disablePeerDependencies",
+    // Separate each Major version of dependencies into individual PRs.       | https://docs.renovatebot.com/presets-default/#separatemultiplemajorreleases
+    ":separateMultipleMajorReleases",
+    // Upgrade to unstable versions only if the existing version is unstable. | https://docs.renovatebot.com/presets-default/#ignoreunstable
+    ":ignoreUnstable",
+    // Use semantic prefixes for commit messages and PR titles.               | https://docs.renovatebot.com/presets-default/#semanticcommits
+    ":semanticCommits",
+    // If Renovate detects semantic commits, it will use semantic
+    // commit type `fix` for dependencies and `chore` for all others.         | https://docs.renovatebot.com/presets-default/#semanticprefixfixdepschoreothers
+    ":semanticPrefixFixDepsChoreOthers",
+    // Update `_VERSION` variables in Dockerfiles.                            | https://docs.renovatebot.com/presets-customManagers/#custommanagersdockerfileversions
+    "customManagers:dockerfileVersions",
+    // Update `_VERSION` environment variables in GitHub Action files.        | https://docs.renovatebot.com/presets-customManagers/#custommanagersgithubactionsversions
+    "customManagers:githubActionsVersions",
+    // Show OpenSSF badge on pull requests.                                   | https://docs.renovatebot.com/presets-security/#securityopenssf-scorecard
+    "security:openssf-scorecard",
+    
+  ],
+
+  "baseBranches": ["main"],
+  "rebaseWhen": "conflicted",
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "postUpdateOptions": ["npmDedupe", "pnpmDedupe", "yarnDedupeFewer"],
+  "transitiveRemediation": true,
+  "separateMajorMinor": true,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true
+  },
+
+  // Dependency Dashboard issue customization.                                | https://docs.renovatebot.com/configuration-options/#dependencydashboard
+  "dependencyDashboardTitle": "Renovate Dependency Dashboard",
+  "dependencyDashboardLabels": ["dependencies"],
+  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.",
+  
+  // Wait at least 7 days for possible fixes before creating a branch/PR.     | https://docs.renovatebot.com/configuration-options/#minimumreleaseage
+  "minimumReleaseAge": "7 days",
+  
+  // Create PRs to roll back versions
+  // if the current version is not found in the registry.                     | https://docs.renovatebot.com/configuration-options/#rollbackprs
+  "rollbackPrs": true,
+  
+  // Sometimes you need to change your Renovate configuration.
+  // To help with this, Renovate will create config migration pull requests.  | https://docs.renovatebot.com/configuration-options/#configmigration
+  "configMigration": true,
+  
+  // Renovate will wait until status checks have been completed
+  // (passed or failed) before raising the PR."                               | https://docs.renovatebot.com/configuration-options/#prcreation
+  "prCreation": "not-pending",
+
+  "vulnerabilityAlerts": {
+    "description": "Be sure that the Dependency graph and Dependabot alerts are enabled for the repo. Details: https://docs.renovatebot.com/configuration-options/#vulnerabilityalerts",
+    "enabled": true,
+    // Append `security` label.
+    "addLabels": ["security"]
+  },
+  
+  // Use vulnerability alerts from https://osv.dev                            | https://docs.renovatebot.com/configuration-options/#osvvulnerabilityalerts
+  "osvVulnerabilityAlerts": true,
+
+  "packageRules": [
+    {
+      "matchDepTypes": ["optionalDependencies"],
+      "addLabels": ["optional"]
+    },
+    {
+      "description": "v prefix workaround for action updates",
+      "matchDepTypes": ["action"],
+      "extractVersion": "^(?<version>v\\d+\\.\\d+\\.\\d+)$",
+      "versioning": "regex:^v(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+))?$"
+    },
+    {
+      "description": "Remove v prefix in regex `_VERSION` updates",
+      "matchManagers": ["custom.regex"],
+      "extractVersion": "^?v?(?<version>\\d+\\.\\d+\\.\\d+.*)$",
+      "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+.*))?$"
+    }
+  ],
+  
+  // Limit branch creation to these times of day or week.                     | https://docs.renovatebot.com/configuration-options/#schedule
+  "schedule": ["at any time"]
+}
