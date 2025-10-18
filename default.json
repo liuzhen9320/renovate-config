@@ -17,7 +17,8 @@
     "security:openssf-scorecard"
   ],
   "baseBranches": [
-    "main"
+    "main",
+    "master"
   ],
   "rebaseWhen": "conflicted",
   "labels": [
