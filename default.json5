@@ -38,10 +38,17 @@
   "baseBranches": ["main"],
   "rebaseWhen": "conflicted",
   "labels": ["dependencies"],
-  "rangeStrategy": "bump",
+
+  // Determines how to modify or update existing ranges.                      | https://docs.renovatebot.com/configuration-options/#rangestrategy
+  "rangeStrategy": "auto",
+
+  // Enable post-update options to be run after package/artifact updating.    | https://docs.renovatebot.com/configuration-options/#postupdateoptions
   "postUpdateOptions": ["npmDedupe", "pnpmDedupe", "yarnDedupeFewer"],
-  "transitiveRemediation": true,
+
+  // false -> Renovate will upgrade dependencies to their latest only.        | https://docs.renovatebot.com/configuration-options/#separatemajorminor
   "separateMajorMinor": true,
+
+  // Configuration for lock file maintenance.                                 | https://docs.renovatebot.com/configuration-options/#lockfilemaintenance
   "lockFileMaintenance": {
     "enabled": true,
     "automerge": true
