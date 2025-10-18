@@ -49,7 +49,7 @@
 
   // Configuration for lock file maintenance.                                 | https://docs.renovatebot.com/configuration-options/#lockfilemaintenance
   "lockFileMaintenance": {
-    "enabled": true,
+    "enabled": false,
     "automerge": true
   },
 
