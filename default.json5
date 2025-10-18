@@ -32,7 +32,6 @@
     "customManagers:githubActionsVersions",
     // Show OpenSSF badge on pull requests.                                   | https://docs.renovatebot.com/presets-security/#securityopenssf-scorecard
     "security:openssf-scorecard",
-    
   ],
 
   "baseBranches": ["main", "master"],
@@ -57,7 +56,7 @@
   // Dependency Dashboard issue customization.                                | https://docs.renovatebot.com/configuration-options/#dependencydashboard
   "dependencyDashboardTitle": "Renovate Dependency Dashboard",
   "dependencyDashboardLabels": ["dependencies"],
-  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.",
+  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) to learn more.",
   
   // Wait at least 7 days for possible fixes before creating a branch/PR.     | https://docs.renovatebot.com/configuration-options/#minimumreleaseage
   "minimumReleaseAge": "7 days",
@@ -72,7 +71,7 @@
   
   // Renovate will wait until status checks have been completed
   // (passed or failed) before raising the PR."                               | https://docs.renovatebot.com/configuration-options/#prcreation
-  "prCreation": "not-pending",
+  "prCreation": "immediate",
 
   "vulnerabilityAlerts": {
     "description": "Be sure that the Dependency graph and Dependabot alerts are enabled for the repo. Details: https://docs.renovatebot.com/configuration-options/#vulnerabilityalerts",
@@ -100,7 +99,148 @@
       "matchManagers": ["custom.regex"],
       "extractVersion": "^?v?(?<version>\\d+\\.\\d+\\.\\d+.*)$",
       "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+.*))?$"
-    }
+    },
+    // Copied from https://github.com/darraghoriordan/renovate-config/blob/main/base.json#L39
+    {
+      "description": "Group major updates together",
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["major"],
+      "reviewersFromCodeOwners": true,
+      "addLabels": ["major", "version-update"],
+      "commitMessagePrefix": "fix(renovate):",
+      "groupName": "major"
+    },
+    {
+      "description": "Group minor updates together",
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["minor"],
+      "addLabels": ["minor"],
+      "commitMessagePrefix": "fix(renovate):",
+      "groupName": "minor"
+    },
+    {
+      "description": "Group patch updates together and automerge if tests pass",
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["patch"],
+      "addLabels": ["patch"],
+      "commitMessagePrefix": "fix(renovate):",
+      "groupName": "patch",
+      "automerge": true
+    },
+    {
+      "description": "Group pin updates together and automerge if tests pass",
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["pin", "digest"],
+      "addLabels": ["pin"],
+      "commitMessagePrefix": "fix(renovate): pin",
+      "groupName": "pin",
+      "automerge": true
+    },
+    {
+      "description": "Automerge any updates to types",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor"],
+      "addLabels": ["minor"],
+      "matchPackagePatterns": ["^@types/"],
+      "groupName": "minor-types",
+      "commitMessagePrefix": "fix(renovate): @types",
+      "automerge": true
+    },
+    {
+      "description": "Automerge any updates to linting or prettier",
+      "matchDepTypes": ["devDependencies"],
+      "matchPackagePatterns": ["lint", "prettier"],
+      "automerge": true
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "matchPackagePatterns": ["alpine"],
+      "separateMinorPatch": true
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "matchPackagePatterns": ["alpine"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "Automerge Github Actions updates",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "matchManagers": "github-actions",
+      "separateMultipleMajor": true,
+      "groupName": "github-actions"
+    },
+    {
+      "matchDepNames": ["node"],
+      "matchPackagePatterns": ["/node$"],
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major"],
+      "groupName": "node major"
+    },
+    {
+      "matchDepNames": ["pnpm"],
+      "matchPackagePatterns": ["/pnpm$"],
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major"],
+      "groupName": "pnpm major"
+    },
+    {
+      "matchDepNames": ["npm"],
+      "matchPackagePatterns": ["/npm$"],
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major"],
+      "groupName": "npm major"
+    },
+    {
+      "matchDepNames": ["typescript"],
+      "matchPackagePatterns": ["^typescript$"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "Typescript major"
+    },
+    {
+      "description": "Do not update postgres major versions",
+      "matchPackagePatterns": ["postgres"],
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["postgres"],
+      "matchManagers": ["docker-compose", "dockerfile"],
+      "enabled": false
+    },
+      {
+      "description": "Do not update eslint major versions. v9 is breaking change",
+      "matchPackagePatterns": ["^eslint$"],
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["eslint"],
+      "enabled": false
+    },
+    {
+      "description": "Vitest does not follow semver, minor changes are breaking changes",
+      "matchDepNames": ["vitest"],
+      "matchPackagePatterns": ["^vitest$"],
+      "matchUpdateTypes": ["minor", "major"],
+      "addLabels": ["vitest"],
+      "groupName": "vitest"
+    },
+    {
+      "description": "Do not update mongo",
+      "matchPackagePatterns": ["^mongo$"],
+      "addLabels": ["mongo"],
+      "enabled": false
+    },
+    {
+      "description": "Do not update react major if it is 16",
+      "matchPackagePatterns": [
+        "^react$",
+        "^react-dom$",
+        "^@types/react$",
+        "^@types/react-dom$"
+      ],
+      "matchCurrentVersion": "^16.0.0",
+      "allowedVersions": "^16.0.0"
+    },
   ],
   
   // Limit branch creation to these times of day or week.                     | https://docs.renovatebot.com/configuration-options/#schedule
