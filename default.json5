@@ -35,7 +35,7 @@
     
   ],
 
-  "baseBranches": ["main"],
+  "baseBranches": ["main", "master"],
   "rebaseWhen": "conflicted",
   "labels": ["dependencies"],
 
