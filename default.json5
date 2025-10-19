@@ -53,6 +53,8 @@
     "automerge": true
   },
 
+  "prConcurrentLimit": 10,
+
   // Dependency Dashboard issue customization.                                | https://docs.renovatebot.com/configuration-options/#dependencydashboard
   "dependencyDashboardTitle": "Renovate Dependency Dashboard",
   "dependencyDashboardLabels": ["dependencies"],
