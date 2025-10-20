@@ -98,7 +98,7 @@
       "matchUpdateTypes": ["major"],
       "reviewersFromCodeOwners": true,
       "addLabels": ["major", "version-update"],
-      "commitMessagePrefix": "fix(renovate):",
+      "commitMessagePrefix": "fix(deps):",
       "groupName": "major"
     },
     {
@@ -106,7 +106,7 @@
       "matchPackagePatterns": ["*"],
       "matchUpdateTypes": ["minor"],
       "addLabels": ["minor"],
-      "commitMessagePrefix": "fix(renovate):",
+      "commitMessagePrefix": "fix(deps):",
       "groupName": "minor"
     },
     {
@@ -116,7 +116,7 @@
       "addLabels": ["minor"],
       "matchPackagePatterns": ["^@types/"],
       "groupName": "minor-types",
-      "commitMessagePrefix": "chore(renovate): @types",
+      "commitMessagePrefix": "chore(deps): @types",
       "automerge": true
     },
     {
@@ -169,7 +169,7 @@
       "matchUpdateTypes": ["major"],
       "addLabels": ["postgres"],
       "matchManagers": ["docker-compose", "dockerfile"],
-      "enabled": true
+      "enabled": false
     },
     {
       "description": "Vitest does not follow semver, minor changes are breaking changes",
