@@ -16,7 +16,6 @@
     "customManagers:githubActionsVersions",
     "security:openssf-scorecard"
   ],
-  "prConcurrentLimit": 10,
   "baseBranches": [
     "main",
     "master"
@@ -31,6 +30,7 @@
     "enabled": false,
     "automerge": true
   },
+  "prConcurrentLimit": 10,
   "dependencyDashboardTitle": "Renovate Dependency Dashboard",
   "dependencyDashboardLabels": [
     "dependencies"
@@ -56,22 +56,6 @@
       "addLabels": [
         "optional"
       ]
-    },
-    {
-      "description": "v prefix workaround for action updates",
-      "matchDepTypes": [
-        "action"
-      ],
-      "extractVersion": "^(?<version>v\\d+\\.\\d+\\.\\d+)$",
-      "versioning": "regex:^v(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+))?$"
-    },
-    {
-      "description": "Remove v prefix in regex `_VERSION` updates",
-      "matchManagers": [
-        "custom.regex"
-      ],
-      "extractVersion": "^?v?(?<version>\\d+\\.\\d+\\.\\d+.*)$",
-      "versioning": "regex:^v?(?<major>\\d+)(\\.(?<minor>\\d+)\\.(?<patch>\\d+.*))?$"
     },
     {
       "description": "Group major updates together",
@@ -243,27 +227,6 @@
         "vitest"
       ],
       "groupName": "vitest"
-    },
-    {
-      "description": "Do not update mongo",
-      "matchPackagePatterns": [
-        "^mongo$"
-      ],
-      "addLabels": [
-        "mongo"
-      ],
-      "enabled": true
-    },
-    {
-      "description": "Do not update react major if it is 16",
-      "matchPackagePatterns": [
-        "^react$",
-        "^react-dom$",
-        "^@types/react$",
-        "^@types/react-dom$"
-      ],
-      "matchCurrentVersion": "^16.0.0",
-      "allowedVersions": "^16.0.0"
     }
   ],
   "schedule": [
