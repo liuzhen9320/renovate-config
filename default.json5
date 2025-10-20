@@ -179,7 +179,27 @@
       "groupName": "vitest"
     },
   ],
-  
+
+  // Custom Manager Support using Regex                                   | https://docs.renovatebot.com/modules/manager/regex/
+  "customManagers": [
+    // Dockerfile has many ENV variables that want to keep up-to-date.    | https://docs.renovatebot.com/modules/manager/regex/#advanced-capture
+    {
+      "customType": "regex",
+      "description": "Update _VERSION variables in Dockerfiles",
+      "managerFilePatterns": [
+        "/(^|/|\\.)Dockerfile$/",
+        "/(^|/)Dockerfile\\.[^/]*$/"
+      ],
+      "matchStrings": [
+        // # renovate: datasource=github-tags depName=node packageName=nodejs/node versioning=node
+        // # renovate: datasource=github-releases depName=composer packageName=composer/composer
+        // # renovate: datasource=docker packageName=docker versioning=docker
+        // # renovate: datasource=npm packageName=yarn
+        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s(?:ENV|ARG) .+?_VERSION=(?<currentValue>.+?)\\s"
+      ]
+    }
+  ],
+
   // Limit branch creation to these times of day or week.                     | https://docs.renovatebot.com/configuration-options/#schedule
   "schedule": ["at any time"]
 }
