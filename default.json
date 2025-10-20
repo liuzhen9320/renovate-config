@@ -2,19 +2,20 @@
   "extends": [
     "config:recommended",
     "group:linters",
+    "group:monorepos",
+    "abandonments:recommended",
     "helpers:disableTypesNodeMajor",
     "helpers:pinGitHubActionDigests",
-    "preview:dockerVersions",
     "preview:dockerCompose",
     ":timezone(Asia/Shanghai)",
     ":disablePeerDependencies",
     ":separateMultipleMajorReleases",
     ":ignoreUnstable",
     ":semanticCommits",
+    ":semanticCommitScope(deps)",
     ":semanticPrefixFixDepsChoreOthers",
-    "customManagers:dockerfileVersions",
-    "customManagers:githubActionsVersions",
-    "security:openssf-scorecard"
+    "security:openssf-scorecard",
+    "mergeConfidence:all-badges"
   ],
   "baseBranches": [
     "main",
@@ -36,7 +37,7 @@
     "dependencies"
   ],
   "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) to learn more.",
-  "minimumReleaseAge": "7 days",
+  "minimumReleaseAge": "3 days",
   "rollbackPrs": true,
   "configMigration": true,
   "prCreation": "immediate",
@@ -70,7 +71,7 @@
         "major",
         "version-update"
       ],
-      "commitMessagePrefix": "fix(renovate):",
+      "commitMessagePrefix": "fix(deps):",
       "groupName": "major"
     },
     {
@@ -84,7 +85,7 @@
       "addLabels": [
         "minor"
       ],
-      "commitMessagePrefix": "fix(renovate):",
+      "commitMessagePrefix": "fix(deps):",
       "groupName": "minor"
     },
     {
@@ -102,7 +103,7 @@
         "^@types/"
       ],
       "groupName": "minor-types",
-      "commitMessagePrefix": "chore(renovate): @types",
+      "commitMessagePrefix": "chore(deps): @types",
       "automerge": true
     },
     {
@@ -209,7 +210,7 @@
         "docker-compose",
         "dockerfile"
       ],
-      "enabled": true
+      "enabled": false
     },
     {
       "description": "Vitest does not follow semver, minor changes are breaking changes",
@@ -233,12 +234,22 @@
     {
       "customType": "regex",
       "description": "Update _VERSION variables in Dockerfiles",
-      "managerFilePatterns": [
-        "/(^|/|\\.)Dockerfile$/",
-        "/(^|/)Dockerfile\\.[^/]*$/"
+      "fileMatch": [
+        "(^|/|\\.)Dockerfile$",
+        "(^|/)Dockerfile\\.[^/]*$"
       ],
       "matchStrings": [
-        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s(?:ENV|ARG) .+?_VERSION=(?<currentValue>.+?)\\s"
+        "# renovate: datasource=(?<datasource>[a-zA-Z0-9-._]+?) depName=(?<depName>[^\\s]+?)(?: (lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?(?: registryUrl=(?<registryUrl>[^\\s]+?))?\\s(?:ENV|ARG)\\s+[A-Za-z0-9_]+?_VERSION[ =][\"']?(?<currentValue>.+?)[\"']?\\s"
+      ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update _VERSION variables in shell scripts",
+      "fileMatch": [
+        "\\.sh$"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: (?:packageName|lookupName)=(?<packageName>.+?))?(?: versioning=(?<versioning>[a-z-]+?))?\\s[A-Z_]+?_VERSION=(?<currentValue>.+?)\\s"
       ]
     }
   ],
