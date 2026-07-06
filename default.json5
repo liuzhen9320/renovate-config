@@ -23,9 +23,6 @@
     ":separateMultipleMajorReleases",
     // Upgrade to unstable versions only if the existing version is unstable. | https://docs.renovatebot.com/presets-default/#ignoreunstable
     ":ignoreUnstable",
-    // Use semantic prefixes for commit messages and PR titles.               | https://docs.renovatebot.com/presets-default/#semanticcommits
-    ":semanticCommits",
-    ":semanticCommitScope(deps)",
     // If Renovate detects semantic commits, it will use semantic
     // commit type `fix` for dependencies and `chore` for all others.         | https://docs.renovatebot.com/presets-default/#semanticprefixfixdepschoreothers
     ":semanticPrefixFixDepsChoreOthers",
