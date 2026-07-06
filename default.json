@@ -11,11 +11,11 @@
     ":disablePeerDependencies",
     ":separateMultipleMajorReleases",
     ":ignoreUnstable",
-    ":semanticCommits",
-    ":semanticCommitScope(deps)",
     ":semanticPrefixFixDepsChoreOthers",
     "security:openssf-scorecard",
-    "mergeConfidence:all-badges"
+    "mergeConfidence:all-badges",
+    "github>home-operations/renovate-presets//policies/semanticCommits.json5#2.1.0",
+    "github>home-operations/renovate-presets//managers/annotated.json5#2.1.0"
   ],
   "baseBranches": [
     "main",
@@ -28,15 +28,15 @@
   "rangeStrategy": "auto",
   "separateMajorMinor": true,
   "lockFileMaintenance": {
-    "enabled": false,
-    "automerge": true
+    "enabled": true,
+    "automerge": false
   },
   "prConcurrentLimit": 10,
   "dependencyDashboardTitle": "Renovate Dependency Dashboard",
   "dependencyDashboardLabels": [
     "dependencies"
   ],
-  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) to learn more.",
+  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies.",
   "minimumReleaseAge": "3 days",
   "rollbackPrs": true,
   "configMigration": true,
@@ -57,36 +57,6 @@
       "addLabels": [
         "optional"
       ]
-    },
-    {
-      "description": "Group major updates together",
-      "matchPackagePatterns": [
-        "*"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ],
-      "reviewersFromCodeOwners": true,
-      "addLabels": [
-        "major",
-        "version-update"
-      ],
-      "commitMessagePrefix": "fix(deps):",
-      "groupName": "major"
-    },
-    {
-      "description": "Group minor updates together",
-      "matchPackagePatterns": [
-        "*"
-      ],
-      "matchUpdateTypes": [
-        "minor"
-      ],
-      "addLabels": [
-        "minor"
-      ],
-      "commitMessagePrefix": "fix(deps):",
-      "groupName": "minor"
     },
     {
       "description": "Automerge any updates to types",
@@ -139,6 +109,7 @@
       "automerge": true
     },
     {
+      "description": "Group node major updates",
       "matchDepNames": [
         "node"
       ],
@@ -154,6 +125,7 @@
       "groupName": "node major"
     },
     {
+      "description": "Group pnpm major updates",
       "matchDepNames": [
         "pnpm"
       ],
@@ -169,6 +141,7 @@
       "groupName": "pnpm major"
     },
     {
+      "description": "Group npm major updates",
       "matchDepNames": [
         "npm"
       ],
@@ -228,6 +201,28 @@
         "vitest"
       ],
       "groupName": "vitest"
+    },
+    {
+      "description": "Automerge trusted Github Actions",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "/^actions\\//"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pin"
+      ],
+      "addLabels": [
+        "github-actions"
+      ],
+      "groupName": "github-actions",
+      "automerge": true,
+      "minimumReleaseAge": "1 days",
+      "ignoreTests": true
     }
   ],
   "customManagers": [
