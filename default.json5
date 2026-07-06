@@ -50,8 +50,8 @@
 
   // Configuration for lock file maintenance.                                 | https://docs.renovatebot.com/configuration-options/#lockfilemaintenance
   "lockFileMaintenance": {
-    "enabled": false,
-    "automerge": true
+    "enabled": true,
+    "automerge": false
   },
 
   "prConcurrentLimit": 10,
@@ -59,7 +59,7 @@
   // Dependency Dashboard issue customization.                                | https://docs.renovatebot.com/configuration-options/#dependencydashboard
   "dependencyDashboardTitle": "Renovate Dependency Dashboard",
   "dependencyDashboardLabels": ["dependencies"],
-  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) to learn more.",
+  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies.",
   
   // Wait at least 3 days for possible fixes before creating a branch/PR.     | https://docs.renovatebot.com/configuration-options/#minimumreleaseage
   "minimumReleaseAge": "3 days",
@@ -93,23 +93,6 @@
     },
     // Copied from https://github.com/darraghoriordan/renovate-config/blob/main/base.json#L39
     {
-      "description": "Group major updates together",
-      "matchPackagePatterns": ["*"],
-      "matchUpdateTypes": ["major"],
-      "reviewersFromCodeOwners": true,
-      "addLabels": ["major", "version-update"],
-      "commitMessagePrefix": "fix(deps):",
-      "groupName": "major"
-    },
-    {
-      "description": "Group minor updates together",
-      "matchPackagePatterns": ["*"],
-      "matchUpdateTypes": ["minor"],
-      "addLabels": ["minor"],
-      "commitMessagePrefix": "fix(deps):",
-      "groupName": "minor"
-    },
-    {
       "description": "Automerge any updates to types",
       "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor"],
@@ -137,6 +120,7 @@
       "automerge": true
     },
     {
+      "description": "Group node major updates",
       "matchDepNames": ["node"],
       "matchPackagePatterns": ["/node$"],
       "matchUpdateTypes": ["major"],
@@ -144,6 +128,7 @@
       "groupName": "node major"
     },
     {
+      "description": "Group pnpm major updates",
       "matchDepNames": ["pnpm"],
       "matchPackagePatterns": ["/pnpm$"],
       "matchUpdateTypes": ["major"],
@@ -151,6 +136,7 @@
       "groupName": "pnpm major"
     },
     {
+      "description": "Group npm major updates",
       "matchDepNames": ["npm"],
       "matchPackagePatterns": ["/npm$"],
       "matchUpdateTypes": ["major"],
@@ -179,6 +165,27 @@
       "addLabels": ["vitest"],
       "groupName": "vitest"
     },
+    // Github Actions
+    {
+      "description": "Automerge trusted Github Actions",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "/^actions\\//"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pin"
+      ],
+      "addLabels": ["github-actions"],
+      "groupName": "github-actions",
+      "automerge": true,
+      "minimumReleaseAge": "1 days",
+      "ignoreTests": true
+    }
   ],
 
   // Custom Manager Support using Regex                                   | https://docs.renovatebot.com/modules/manager/regex/
