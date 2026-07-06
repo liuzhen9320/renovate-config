@@ -181,9 +181,9 @@
         "pin"
       ],
       "addLabels": ["github-actions"],
-      "groupName": "github-actions",
+      "groupName": "actions",
       "automerge": true,
-      "minimumReleaseAge": "1 days",
+      "minimumReleaseAge": "1 minute",
       "ignoreTests": true
     }
   ],
