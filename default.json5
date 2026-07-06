@@ -33,6 +33,9 @@
     "security:openssf-scorecard",
     // Prevent updates which break in production.                             | https://docs.renovatebot.com/merge-confidence/
     "mergeConfidence:all-badges",
+
+    "github>home-operations/renovate-presets//policies/semanticCommits.json5#2.1.0",
+    "github>home-operations/renovate-presets//managers/annotated.json5#2.1.0",
   ],
 
   "baseBranches": ["main", "master"],
